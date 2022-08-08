@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import axios from 'axios'
 
 import sunsetGIF from './assets/sunset.gif'
@@ -13,12 +13,12 @@ function App() {
   const api_key = "78a8ba5fefb418c25358149acee65c9c"
 
   const url = `https://api.openweathermap.org/data/2.5/weather?q=${location}&appid=${api_key}`
+
   const searchLocation = (event) => {
     if (event.key === 'Enter') {
       axios.get(url)
           .then((response) => {
             setData(response.data)
-            console.log(response.data)
           })
       setLocation('')
     }
@@ -28,6 +28,21 @@ function App() {
     return Math.round((((tempKelvin - 273.15) * 9) / 5) + 32);
   }
 
+  const reqLocation = () => {
+    navigator.geolocation.getCurrentPosition((pos) => {
+      const coords_url = `https://api.openweathermap.org/data/2.5/weather?lat=${pos.coords.latitude}&lon=${pos.coords.longitude}&appid=${api_key}`
+      axios.get(coords_url)
+          .then((response) => {
+            setData(response.data)
+            console.log(response.data)
+          })
+    })
+  }
+
+  useEffect(() => {
+    reqLocation();
+  }, [])
+
   return (
     <div className="App">
       <img className="background"
@@ -35,10 +50,9 @@ function App() {
            alt=""
       />
 
-
       <div className="search">
         <input value={location}
-               onChange={event=>setLocation(event.target.value)}
+               onChange={event => setLocation(event.target.value)}
                placeholder='Enter Location'
                onKeyPress={searchLocation}
                type="text"
@@ -59,15 +73,15 @@ function App() {
         </div>
         <div className="bottom">
           <div className="feels-like">
-            <p>Feels Like</p>
+            Feels Like
             <p className="bold">{convertTemp(data.main ? data.main.feels_like : null)}°F</p>
           </div>
           <div className="humidity">
-            <p>Humidity</p>
-            <p>{data.main ? data.main.humidity : null}%</p>
+            Humidity
+            <p className="bold">{data.main ? data.main.humidity : null}%</p>
           </div>
           <div className="wind">
-            <p>Wind Speed</p>
+            Wind Speed
             <p className="bold">{data.main ? data.wind.speed : null} MPH</p>
           </div>
         </div>
