@@ -52,9 +52,9 @@ h1 {
   zoom: 1.01;
 }
 
-.container {
+.display {
   max-width: 600px;
-  height: 700px;
+  height: 800px;
   margin: auto;
   position: relative;
   top: 10%;
@@ -63,27 +63,44 @@ h1 {
   justify-content: space-between;
 }
 
-.App .top {
+.info-wrapper {
+  display: flex;
+  justify-content: center;
+  margin: 15px;
+}
+
+.top {
   width: 100%;
   margin: 1rem auto;
 }
 
-.App .description {
+.description {
   position: relative;
   right: -90%;
   transform-origin: 0 0;
   transform: rotate(270deg);
 }
 
-.App .bottom {
-  display: flex;
-  justify-content: space-evenly;
+.bottom {
   text-align: center;
   width: 100%;
-  margin: 1rem auto;
+  margin: 0 auto;
   padding: 1rem;
-  border-radius: 12px;
-  background-color: rgba(255,255,255, .2);
+  background-color: rgba(0,0,0, .4);
+  background-image: repeating-linear-gradient(-60deg, #ffffff, #ffffff 30px, transparent 30px, transparent 31px, #ffffff 31px), repeating-linear-gradient(30deg, #ffffff, #ffffff 30px, transparent 30px, transparent 31px, #ffffff 31px), repeating-linear-gradient(120deg, #ffffff, #ffffff 30px, transparent 30px, transparent 31px, #ffffff 31px), repeating-linear-gradient(210deg, #ffffff, #ffffff 30px, transparent 30px, transparent 31px, #ffffff 31px);
+  background-size: 3px calc(100% + 62px), calc(100% + 62px) 3px, 3px calc(100% + 62px) , calc(100% + 62px) 3px;
+  background-position: 0 0, 0 0, 100% 0, 0 100%;
+  background-repeat: no-repeat;
+  animation: borderAnimation 0.8s infinite linear;
+}
+
+.info-wrapper > div + div {
+  margin-left: 3vw;
+}
+
+@keyframes borderAnimation {
+  from { background-position: 0 0, -62px 0, 100% -62px, 0 100%; }
+  to { background-position: 0 -62px, 0 0, 100% 0, -62px 100%; }
 }
 
 .App .search {

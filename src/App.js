@@ -1,6 +1,8 @@
 import { useState, useEffect } from 'react'
 import axios from 'axios'
 
+import Display from './Display'
+
 import sunsetGIF from './assets/sunset.gif'
 import rainGIF from './assets/rain.gif'
 import cloudGIF from './assets/clouds.gif'
@@ -24,10 +26,6 @@ function App() {
     }
   }
 
-  const convertTemp = (tempKelvin) => {
-    return Math.round((((tempKelvin - 273.15) * 9) / 5) + 32);
-  }
-
   const reqLocation = () => {
     navigator.geolocation.getCurrentPosition((pos) => {
       const coords_url = `https://api.openweathermap.org/data/2.5/weather?lat=${pos.coords.latitude}&lon=${pos.coords.longitude}&appid=${api_key}`
@@ -46,7 +44,7 @@ function App() {
   return (
     <div className="App">
       <img className="background"
-           src={ data.main ? (data.weather[0].main === 'Clouds' ? cloudGIF : (data.weather[0].main === 'Rain' ? rainGIF : sunsetGIF)) : null }
+           src={ data.main ? (data.weather[0].main === 'Clouds' ? cloudGIF : ((data.weather[0].main === 'Rain' || data.weather[0].main === 'Thunderstorm') ? rainGIF : sunsetGIF)) : null }
            alt=""
       />
 
@@ -59,33 +57,7 @@ function App() {
         />
       </div>
 
-      <div className="container">
-        <div className="top">
-          <div className="location">
-            <p>{data.name}</p>
-          </div>
-          <div className="temp">
-            <h1>{data.main ? convertTemp(data.main.temp) : null}°F</h1>
-          </div>
-          <div className="description">
-            <p>{data.weather ? data.weather[0].main : null}</p>
-          </div>
-        </div>
-        <div className="bottom">
-          <div className="feels-like">
-            Feels Like
-            <p className="bold">{convertTemp(data.main ? data.main.feels_like : null)}°F</p>
-          </div>
-          <div className="humidity">
-            Humidity
-            <p className="bold">{data.main ? data.main.humidity : null}%</p>
-          </div>
-          <div className="wind">
-            Wind Speed
-            <p className="bold">{data.main ? data.wind.speed : null} MPH</p>
-          </div>
-        </div>
-      </div>
+      <Display data={data}/>
     </div>
   );
 }
